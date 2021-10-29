@@ -21,21 +21,17 @@ const Main = () => {
             }
         })
 
-    },[])
-
-    useEffect(() =>{
         socket.on('adminMessage',({username,room}) =>{
-            setChat([...chat,`${username} 님 ${room} 번 방에 오신 것을 환영합니다.`])
+            setChat(oldChat => [...oldChat,`${username} 님 ${room} 번 방에 오신 것을 환영합니다.`])
         })
         socket.on('message',({username, room, message}) =>{
-            setChat([...chat,`${username} : ${message}`])
+            setChat(oldChat => [...oldChat,`${username} : ${message}`])
         })
         socket.on('gameMessage',(message) =>{
-            setChat([...chat,`admin : ${message}`])
+            setChat(oldChat => [...oldChat,`admin : ${message}`])
         })
-        console.log('hi')
-    },[chat])
-
+        console.log(chat)
+    },[])
 
     const onChangeMessage = (event) =>{
         const {target: {value}} = event;
@@ -52,8 +48,8 @@ const Main = () => {
     }
 
     const renderChat = () =>{
-        return chat.map((text) =>{
-            return <div>{text}</div>
+        return chat.map((text, index) =>{
+            return <div key={index}>{text}</div>
         })
     }
 
