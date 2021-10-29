@@ -8,6 +8,7 @@ const Login = () => {
 
     const [username,setUsername] = useState("");
     const [room,setRoom] = useState("");
+    const [flashMessage,setFlashMessage] = useState("");
 
     const onChange = (event) =>{
         const {target : {name,value}}= event;
@@ -23,10 +24,18 @@ const Login = () => {
     }
 
     const onClick = (event) =>{
-        localStorage.setItem('username', username);
-        let hubo = [0,1,2,3,4,5,6,7,8,9]
-        shuffle(hubo)
-        localStorage.setItem('dap', hubo.slice(0,5).join(''));
+        if(username == ''){
+            event.preventDefault()
+            setFlashMessage('username을 입력 해주세요.')
+        }else if(room == ''){
+            event.preventDefault()
+            setFlashMessage('room 번호를 입력 해주세요.')
+        }else{
+            localStorage.setItem('username', username);
+            let hubo = [0,1,2,3,4,5,6,7,8,9]
+            shuffle(hubo)
+            localStorage.setItem('dap', hubo.slice(0,5).join(''));
+        }
     }
 
     const shuffle = (array) =>{
@@ -41,9 +50,9 @@ const Login = () => {
                 <link href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@300;400;600&display=swap" rel="stylesheet"/>
                 <Form onSubmit={onLoginSubmit}>
                     <Input name="username" type="username" placeholder="Username" required value={username} onChange={onChange}></Input>
-                    <Input name="room" required value={room} placeholder="Room" onChange={onChange}></Input>
-                    <InputSummit type="submit" value={"Login"} />
-                    <Link to={`/room/${room}`} onClick={onClick}>Login</Link>
+                    <Input name="room" required value={room} placeholder="Room Number" onChange={onChange}></Input>
+                    <LinkStyle to={`/room/${room}`} onClick={onClick}>Login</LinkStyle>
+                    <FlashMessage>{flashMessage}</FlashMessage>
                 </Form>
             </Grid>
             <Grid xs={6} md={5}></Grid>
@@ -72,12 +81,23 @@ color:black;
 }
 `
 
-const InputSummit = styled.input`
-width: 100%;
-height: 35px;
-align-items: center;
-border-radius: 5px;
-color:black;
-background: linear-gradient(to right, #0872ff, #2985ff);
-margin-top: 20px;
+const LinkStyle = styled(Link)`
+    width: 100%;
+    height: 35px;
+    display:block;
+    text-align: center;
+    border-radius: 5px;
+    border: 2px solid black;
+    color:white;
+    font-size: 20px;
+    font-weight:400;
+    background: linear-gradient(to right, #0872ff, #2985ff);
+    margin-top: 20px;
+    text-decoration: none;
+    &:focus, &:active,&:hover {
+        color:#0d4b9e;
+    }
+`
+const FlashMessage = styled.div`
+color:red;
 `

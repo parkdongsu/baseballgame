@@ -62,12 +62,19 @@ const Main = () => {
         <Grid container spacing={2}>
             <Grid item xs={6} md={8}>
             </Grid>
-            <Grid item xs={6} md={4}>
-                {renderChat()}
-                <form onSubmit={onSubmitMessage}>
-                    <input name='message' value={message} onChange={onChangeMessage}></input>
-                    <input type="submit" value={"Send"} />
-                </form>
+            <Grid direction="column" item xs={6} md={4}>
+                <div>game chat</div>
+                <Grid style={{height:'200px', overflowY: 'auto', border: '1px solid black', background: '#b2c7d9'}}item xs={4}>
+                    {renderChat()}
+                </Grid>
+                <Grid item xs={4}>
+                    <form onSubmit={onSubmitMessage}>
+                        <input name='message' value={message} onChange={onChangeMessage}></input>
+                        <input type="submit" value={"Send"} />
+                    </form>
+                </Grid>
+                
+                
             </Grid>
         </Grid>
     );

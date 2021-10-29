@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
                 }
             }
             io.to(room).emit('gameMessage',`${counts}S${countb}B`)
-        },1000)
+        },100)
     })
     
 })
