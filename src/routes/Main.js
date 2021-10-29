@@ -9,6 +9,7 @@ const socket =  io.connect('http://localhost:4000')
 
 const Main = () => {
     const username = localStorage.getItem('username')
+    const dap = localStorage.getItem('dap')
     const room = window.location.href.split("room/")[1];
     const [chat,setChat] = useState([]);
     const [message,setMessage] = useState('');
@@ -19,6 +20,7 @@ const Main = () => {
                 alert('error!!')
             }
         })
+
     },[])
 
     useEffect(() =>{
@@ -27,9 +29,11 @@ const Main = () => {
         })
         socket.on('message',({username, room, message}) =>{
             setChat([...chat,`${username} : ${message}`])
-            console.log(chat)
         })
-        
+        socket.on('gameMessage',(message) =>{
+            setChat([...chat,`admin : ${message}`])
+        })
+        console.log('hi')
     },[chat])
 
 
@@ -40,6 +44,9 @@ const Main = () => {
 
     const onSubmitMessage = (event) =>{
         event.preventDefault()
+        if(message.length ==5 & !isNaN(message)){
+            socket.emit('gameMessage',{username, room, message, dap})
+        }
         socket.emit('message',{username, room, message})
         setMessage('')
     }
@@ -50,10 +57,10 @@ const Main = () => {
         })
     }
 
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={6} md={8}>
-                <div>test</div>
             </Grid>
             <Grid item xs={6} md={4}>
                 {renderChat()}

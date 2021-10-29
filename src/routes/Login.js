@@ -24,6 +24,13 @@ const Login = () => {
 
     const onClick = (event) =>{
         localStorage.setItem('username', username);
+        let hubo = [0,1,2,3,4,5,6,7,8,9]
+        shuffle(hubo)
+        localStorage.setItem('dap', hubo.slice(0,5).join(''));
+    }
+
+    const shuffle = (array) =>{
+        array.sort(() => Math.random() - 0.5);
     }
 
     return (
