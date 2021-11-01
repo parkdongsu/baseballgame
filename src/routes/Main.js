@@ -17,11 +17,17 @@ const Main = () => {
     const [gameChatResultB,setGameChatResultB] = useState([]);
     const [message,setMessage] = useState('');
     const scrollRef = useRef();
+    const scrollRef2 = useRef();
     const [user,setUser] = useState([]);
 
     useEffect(() =>{
         scrollRef.current.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
+    },[gameChatName])
+    useEffect(() =>{
+        scrollRef2.current.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
     },[chat])
+
+    
 
 
     useEffect(() =>{
@@ -117,12 +123,14 @@ const Main = () => {
 
 
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
             <link rel="preconnect" href="https://fonts.googleapis.com"/>
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
             <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet"></link>
-            <Grid item xs={6} md={8}>
-                {renderGameChat()}
+            <Grid style={gameStyle} item xs={6} md={8}>
+                <div ref={scrollRef}>
+                    {renderGameChat()}
+                </div>
             </Grid>
             <Grid direction="column" item xs={6} md={4}>
                 <Grid item xs={4}>
@@ -132,14 +140,12 @@ const Main = () => {
                 </Grid>
                 <Text>참가자</Text>
                 <Grid style={userStyle} item xs={4}>
-                    <div>
                     {renderUsers()}
-                    </div>
                 </Grid>
                 <Text>채팅창</Text>
                 <Grid style={chatStyle} item xs={4}>
-                    <div ref={scrollRef}>
-                    {renderChat()}
+                    <div ref={scrollRef2}>
+                        {renderChat()}
                     </div>
                 </Grid>
                 <Grid item xs={4}>
@@ -160,13 +166,17 @@ export default Main;
 const Exit = styled.div`
 float:right;
 `
+const gameStyle = {
+    height:'800px',
+    padding:'20px',
+    overflowY: 'auto',
+    border: '10px solid #c97c4f',
+    background: '#18541c',
+}
+
 
 const GameContainer = styled.div`
 display:flex;
-border:10px solid #c97c4f;
-background-color: #18541c;
-height:800px;
-padding:20px;
 `
 const NameContainer = styled.div`
 `
@@ -238,7 +248,7 @@ width: 78.7%;
 font-family: 'Gamja Flower', cursive;
 `
 const InputSubmit = styled.input`
-width: 20%;
+width: 19%;
 background: linear-gradient(to right, #648f61, #446142);
 color:white;
 font-family: 'Gamja Flower', cursive;
