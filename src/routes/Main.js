@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
 
-console.log(process.env.NODE_ENV);
-const socketURL = process.env.NODE_ENV === 'development'
+console.log(process.env.REACT_APP_MODE);
+const socketURL = process.env.REACT_APP_MODE === 'development'
     ? 'http://localhost:4000'
     : 'http://testapi.rtrod.org:4000';
 const socket = io.connect(socketURL);

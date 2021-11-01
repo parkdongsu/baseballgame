@@ -26,8 +26,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "local": "cross-env NODE_ENV=development react-scripts start",
-    "start": "cross-env NODE_ENV=production react-scripts start",
+    "local": "cross-env REACT_APP_MODE=development react-scripts start",
+    "start": "cross-env REACT_APP_MODE=production react-scripts start",
     "server": "nodemon ./server/index.js"
   },
   "eslintConfig": {
