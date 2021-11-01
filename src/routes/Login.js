@@ -46,8 +46,9 @@ const Login = () => {
         <Grid container spacing={2}>
             <Grid xs={6} md={5}></Grid>
             <Grid item xs={6} md={2}>
-                <link rel="preconnect" href="https://fonts.gstatic.com"/>
-                <link href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@300;400;600&display=swap" rel="stylesheet"/>
+                <link rel="preconnect" href="https://fonts.googleapis.com"/>
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+                <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet"></link>
                 <Form onSubmit={onLoginSubmit}>
                     <Input name="username" type="username" placeholder="Username" required value={username} onChange={onChange}></Input>
                     <Input name="room" required value={room} placeholder="Room Number" onChange={onChange}></Input>
@@ -79,6 +80,8 @@ color:black;
 ::placeholder {
     color: black;
 }
+font-family: 'Gamja Flower', cursive;
+font-size:20px;
 `
 
 const LinkStyle = styled(Link)`
@@ -97,7 +100,10 @@ const LinkStyle = styled(Link)`
     &:focus, &:active,&:hover {
         color:#0d4b9e;
     }
+    font-family: 'Gamja Flower', cursive;
+    font-size:24px;
 `
 const FlashMessage = styled.div`
 color:red;
+font-family: 'Gamja Flower', cursive;
 `

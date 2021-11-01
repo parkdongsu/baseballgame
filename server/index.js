@@ -17,16 +17,16 @@ io.on('connection', (socket) => {
         socket.join(room)
         console.log(username, '가' , room, '번 방에 입장하셨습니다')
         enterRoom(username,room)
-        console.log(roomList)
-        io.to(room).emit('joinRoom',{username,room})
+        let users = roomList.find(element => element.room == room).users
+        io.to(room).emit('joinRoom',{username,room,users})
     })
 
     socket.on('leave',({username, room}) =>{
         socket.leave(room)
         console.log(username, '가' , room, '번 방에서 퇴장하셨습니다.')
         exitRoom(username,room)
-        console.log(roomList)
-        io.to(room).emit('leaveRoom',{username,room})
+        let users = roomList.find(element => element.room == room).users
+        io.to(room).emit('leaveRoom',{username,room,users})
     })
     
     socket.on('message',({username,room,message}) => {
@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
         io.to(room).emit('message',({username, message}))
     })
 
-    socket.on('gameMessage',({username,room,message, dap}) => {
+    socket.on('gameMessage',({username, room,message, dap}) => {
         let counts = 0
         let countb = 0
         setTimeout(() =>{
@@ -45,7 +45,8 @@ io.on('connection', (socket) => {
                     countb = countb + 1
                 }
             }
-            io.to(room).emit('gameMessage',`${counts}S${countb}B`)
+            console.log(message)
+            io.to(room).emit('gameMessage',({username,message,counts,countb}))
         },100)
     })
     
