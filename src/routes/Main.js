@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import styled from 'styled-components'
 import Grid from '@mui/material/Grid';
@@ -14,93 +14,91 @@ const Main = () => {
     const username = localStorage.getItem('username')
     const dap = localStorage.getItem('dap')
     const room = window.location.href.split("room/")[1];
-    const [chat,setChat] = useState([]);
-    const [gameChatName,setGameChatName] = useState([]);
-    const [gameChatQuestion,setGameChatQuestion] = useState([]);
-    const [gameChatResultS,setGameChatResultS] = useState([]);
-    const [gameChatResultB,setGameChatResultB] = useState([]);
-    const [message,setMessage] = useState('');
+    const [chat, setChat] = useState([]);
+    const [gameChatName, setGameChatName] = useState([]);
+    const [gameChatQuestion, setGameChatQuestion] = useState([]);
+    const [gameChatResultS, setGameChatResultS] = useState([]);
+    const [gameChatResultB, setGameChatResultB] = useState([]);
+    const [message, setMessage] = useState('');
     const scrollRef = useRef();
     const scrollRef2 = useRef();
-    const [user,setUser] = useState([]);
+    const [user, setUser] = useState([]);
 
-    useEffect(() =>{
+    useEffect(() => {
         scrollRef.current.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
-    },[gameChatName])
-    useEffect(() =>{
-        scrollRef2.current.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
-    },[chat])
-
+    }, [gameChatName])
     
+    useEffect(() => {
+        scrollRef2.current.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
+    }, [chat])
 
-
-    useEffect(() =>{
-        socket.emit('join', {username,room}, (error) =>{
-            if(error){
+    useEffect(() => {
+        socket.emit('join', { username, room }, (error) => {
+            if (error) {
                 alert('error!!')
             }
         })
 
-        socket.on('joinRoom',({username,room,users}) =>{
-            setChat(oldChat => [...oldChat,`${username} 님 ${room} 번 방에 오신 것을 환영합니다.`])
+        socket.on('joinRoom', ({ username, room, users }) => {
+            setChat(oldChat => [...oldChat, `${username} 님 ${room} 번 방에 오신 것을 환영합니다.`])
             setUser(users)
         })
-        socket.on('leaveRoom',({username,room,users}) =>{
-            setChat(oldChat => [...oldChat,`${username} 님이 ${room} 번 방에서 퇴장하셨습니다.`])
+        socket.on('leaveRoom', ({ username, room, users }) => {
+            setChat(oldChat => [...oldChat, `${username} 님이 ${room} 번 방에서 퇴장하셨습니다.`])
             setUser(users)
         })
-        socket.on('message',({username, message}) =>{
-            setChat(oldChat => [...oldChat,`${username} : ${message}`])
+        socket.on('message', ({ username, message }) => {
+            setChat(oldChat => [...oldChat, `${username} : ${message}`])
         })
-        socket.on('gameMessage',({username,message,counts,countb}) =>{
-            setGameChatName(oldChat => [...oldChat,username])
-            setGameChatQuestion(oldChat => [...oldChat,message])
-            setGameChatResultS(oldChat => [...oldChat,counts])
-            setGameChatResultB(oldChat => [...oldChat,countb])
+        socket.on('gameMessage', ({ username, message, counts, countb }) => {
+            setGameChatName(oldChat => [...oldChat, username])
+            setGameChatQuestion(oldChat => [...oldChat, message])
+            setGameChatResultS(oldChat => [...oldChat, counts])
+            setGameChatResultB(oldChat => [...oldChat, countb])
         })
-        
-    },[])
 
-    const onChangeMessage = (event) =>{
-        const {target: {value}} = event;
+    }, [])
+
+    const onChangeMessage = (event) => {
+        const { target: { value } } = event;
         setMessage(value)
     }
 
-    const onSubmitMessage = (event) =>{
+    const onSubmitMessage = (event) => {
         event.preventDefault()
-        if(message.length ==5 & !isNaN(message)){
-            socket.emit('gameMessage',{username, room, message, dap})
+        if (message.length === 5 & !isNaN(message)) {
+            socket.emit('gameMessage', { username, room, message, dap })
         }
-        socket.emit('message',{username, room, message})
+        socket.emit('message', { username, room, message })
         setMessage('')
     }
 
-    const renderChat = () =>{
-        return chat.map((text, index) =>{
+    const renderChat = () => {
+        return chat.map((text, index) => {
             return <TextMessage key={index}>{text}</TextMessage>
         })
     }
 
-    const renderGameChat = () =>{
+    const renderGameChat = () => {
         return (
             <GameContainer>
                 <NameContainer>
-                    {gameChatName.map((text, index) =>{
-                            return <Name key={index}>{text}</Name>
+                    {gameChatName.map((text, index) => {
+                        return <Name key={index}>{text}</Name>
                     })}
                 </NameContainer>
                 <QuestionContainer>
-                    {gameChatQuestion.map((text, index) =>{
+                    {gameChatQuestion.map((text, index) => {
                         return <Question key={index}>{text}</Question>
                     })}
                 </QuestionContainer>
                 <ResultContainer>
-                    {gameChatResultS.map((text, index) =>{
+                    {gameChatResultS.map((text, index) => {
                         return <ResultS key={index}>{text}S</ResultS>
                     })}
                 </ResultContainer>
                 <ResultContainer>
-                    {gameChatResultB.map((text, index) =>{
+                    {gameChatResultB.map((text, index) => {
                         return <ResultB key={index}>{text}B</ResultB>
                     })}
                 </ResultContainer>
@@ -108,28 +106,26 @@ const Main = () => {
         )
     }
 
-    const renderUsers = () =>{
-        return user.map((text, index) =>{
+    const renderUsers = () => {
+        return user.map((text, index) => {
             return <Text key={index}>{text}</Text>
         })
     }
 
-    const onClickexit = () =>{
-        socket.emit('leave', {username,room}, (error) =>{
-            if(error){
+    const onClickexit = () => {
+        socket.emit('leave', { username, room }, (error) => {
+            if (error) {
                 alert('error!!')
             }
         })
-        
     }
-
 
 
 
     return (
         <Grid container spacing={1}>
-            <link rel="preconnect" href="https://fonts.googleapis.com"/>
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
             <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet"></link>
             <Grid style={gameStyle} item xs={6} md={8}>
                 <div ref={scrollRef}>
@@ -139,7 +135,7 @@ const Main = () => {
             <Grid direction="column" item xs={6} md={4}>
                 <Grid item xs={4}>
                     <Exit>
-                    <LinkStyle to={`/`} onClick={onClickexit}>나가기</LinkStyle>
+                        <LinkStyle to={`/`} onClick={onClickexit}>나가기</LinkStyle>
                     </Exit>
                 </Grid>
                 <Text>참가자</Text>
@@ -158,8 +154,6 @@ const Main = () => {
                         <InputSubmit type="submit" value={"보내기"} />
                     </form>
                 </Grid>
-                
-                
             </Grid>
         </Grid>
     );
@@ -171,8 +165,8 @@ const Exit = styled.div`
 float:right;
 `
 const gameStyle = {
-    height:'800px',
-    padding:'20px',
+    height: '800px',
+    padding: '20px',
     overflowY: 'auto',
     border: '10px solid #c97c4f',
     background: '#18541c',
@@ -243,9 +237,9 @@ font-size:16px;
 font-family: 'Gamja Flower', cursive;
 `
 
-const userStyle = {clear:'both', height:'95px', overflowY: 'auto', border: '1px solid black', background: 'white'}
+const userStyle = { clear: 'both', height: '95px', overflowY: 'auto', border: '1px solid black', background: 'white' }
 
-const chatStyle = {clear:'both', height:'400px', overflowY: 'auto', border: '1px solid black', background: 'white'}
+const chatStyle = { clear: 'both', height: '400px', overflowY: 'auto', border: '1px solid black', background: 'white' }
 
 const InputMessage = styled.input`
 width: 78.7%;

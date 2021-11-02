@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import io from 'socket.io-client';
 import styled from 'styled-components'
 import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
@@ -24,10 +23,10 @@ const Login = () => {
     }
 
     const onClick = (event) =>{
-        if(username == ''){
+        if(username === ''){
             event.preventDefault()
             setFlashMessage('username을 입력 해주세요.')
-        }else if(room == ''){
+        }else if(room === ''){
             event.preventDefault()
             setFlashMessage('room 번호를 입력 해주세요.')
         }else{
@@ -44,10 +43,10 @@ const Login = () => {
 
     return (
         <Grid container spacing={2}>
-            <Grid xs={6} md={5}></Grid>
-            <Grid item xs={6} md={2}>
+            <Grid xs={3} md={5} item={true}></Grid>
+            <Grid xs={6} md={2} item={true}>
                 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
                 <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet"></link>
                 <Form onSubmit={onLoginSubmit}>
                     <Input name="username" type="username" placeholder="Username" required value={username} onChange={onChange}></Input>
@@ -56,7 +55,7 @@ const Login = () => {
                     <FlashMessage>{flashMessage}</FlashMessage>
                 </Form>
             </Grid>
-            <Grid xs={6} md={5}></Grid>
+            <Grid xs={3} md={5} item={true}></Grid>
         </Grid>
     );
 }
