@@ -31,6 +31,7 @@ const Login = () => {
             setFlashMessage('room 번호를 입력 해주세요.')
         }else{
             localStorage.setItem('username', username);
+            localStorage.setItem('room', room);
             let hubo = [0,1,2,3,4,5,6,7,8,9]
             shuffle(hubo)
             localStorage.setItem('dap', hubo.slice(0,5).join(''));
@@ -51,7 +52,7 @@ const Login = () => {
                 <Form onSubmit={onLoginSubmit}>
                     <Input name="username" type="username" placeholder="Username" required value={username} onChange={onChange}></Input>
                     <Input name="room" required value={room} placeholder="Room Number" onChange={onChange}></Input>
-                    <LinkStyle to={`/room/${room}`} onClick={onClick}>Login</LinkStyle>
+                    <LinkStyle to={"/baseball"} onClick={onClick}>Login</LinkStyle>
                     <FlashMessage>{flashMessage}</FlashMessage>
                 </Form>
             </Grid>

@@ -11,9 +11,9 @@ const socketURL = process.env.REACT_APP_MODE === 'development'
 const socket = io.connect(socketURL);
 
 const Main = () => {
-    const username = localStorage.getItem('username')
-    const dap = localStorage.getItem('dap')
-    const room = window.location.href.split("room/")[1];
+    const username = localStorage.getItem('username');
+    const dap = localStorage.getItem('dap');
+    const room = localStorage.getItem('room');
     const [chat, setChat] = useState([]);
     const [gameChatAll, setGameChatAll] = useState([]);
     const [gameChatName, setGameChatName] = useState([]);
