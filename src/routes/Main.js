@@ -191,8 +191,9 @@ export default Main;
 const Exit = styled.div`
 float:right;
 `
+
 const gameStyle = {
-    height: '800px',
+    height: '100vh',
     padding: '20px',
     overflowY: 'auto',
     border: '10px solid #c97c4f',
