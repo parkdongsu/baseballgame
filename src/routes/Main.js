@@ -15,6 +15,7 @@ const Main = () => {
     const dap = localStorage.getItem('dap')
     const room = window.location.href.split("room/")[1];
     const [chat, setChat] = useState([]);
+    const [gameChatAll, setGameChatAll] = useState([]);
     const [gameChatName, setGameChatName] = useState([]);
     const [gameChatQuestion, setGameChatQuestion] = useState([]);
     const [gameChatResultS, setGameChatResultS] = useState([]);
@@ -27,7 +28,7 @@ const Main = () => {
     useEffect(() => {
         scrollRef.current.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
     }, [gameChatName])
-    
+
     useEffect(() => {
         scrollRef2.current.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
     }, [chat])
@@ -51,6 +52,7 @@ const Main = () => {
             setChat(oldChat => [...oldChat, `${username} : ${message}`])
         })
         socket.on('gameMessage', ({ username, message, counts, countb }) => {
+            setGameChatAll(oldChat => [...oldChat, { username: username, message: message, counts: counts, countb: countb }])
             setGameChatName(oldChat => [...oldChat, username])
             setGameChatQuestion(oldChat => [...oldChat, message])
             setGameChatResultS(oldChat => [...oldChat, counts])
@@ -81,28 +83,52 @@ const Main = () => {
 
     const renderGameChat = () => {
         return (
-            <GameContainer>
-                <NameContainer>
-                    {gameChatName.map((text, index) => {
-                        return <Name key={index}>{text}</Name>
+            // <GameContainer>
+            //     <NameContainer>
+            //         {gameChatName.map((text, index) => {
+            //             return <Name key={index}>{text}</Name>
+            //         })}
+            //     </NameContainer>
+            //     <QuestionContainer>
+            //         {gameChatQuestion.map((text, index) => {
+            //             return <Question key={index}>{text}</Question>
+            //         })}
+            //     </QuestionContainer>
+            //     <ResultContainer>
+            //         {gameChatResultS.map((text, index) => {
+            //             return <ResultS key={index}>{text}S</ResultS>
+            //         })}
+            //     </ResultContainer>
+            //     <ResultContainer>
+            //         {gameChatResultB.map((text, index) => {
+            //             return <ResultB key={index}>{text}B</ResultB>
+            //         })}
+            //     </ResultContainer>
+            // </GameContainer>
+            user.map((user_element, user_index) => {
+                return <Grid key={user_index}>
+                    {gameChatAll.map((element, index) => {
+                        if (element.username === user_element) {
+                            return (
+                                <GameContainer>
+                                    <NameContainer>
+                                        <Name key={'name' + index}>{element.username}</Name>
+                                    </NameContainer>
+                                    <QuestionContainer>
+                                        <Question key={'message' + index}>{element.message}</Question>
+                                    </QuestionContainer>
+                                    <ResultContainer>
+                                        <ResultS key={'results' + index}>{element.counts}S</ResultS>
+                                    </ResultContainer>
+                                    <ResultContainer2>
+                                        <ResultB key={'resultb' + index}>{element.countb}B</ResultB>
+                                    </ResultContainer2>
+                                </GameContainer>
+                            )
+                        }
                     })}
-                </NameContainer>
-                <QuestionContainer>
-                    {gameChatQuestion.map((text, index) => {
-                        return <Question key={index}>{text}</Question>
-                    })}
-                </QuestionContainer>
-                <ResultContainer>
-                    {gameChatResultS.map((text, index) => {
-                        return <ResultS key={index}>{text}S</ResultS>
-                    })}
-                </ResultContainer>
-                <ResultContainer>
-                    {gameChatResultB.map((text, index) => {
-                        return <ResultB key={index}>{text}B</ResultB>
-                    })}
-                </ResultContainer>
-            </GameContainer>
+                </Grid>
+            })
         )
     }
 
@@ -128,9 +154,10 @@ const Main = () => {
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
             <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet"></link>
             <Grid style={gameStyle} item xs={6} md={8}>
-                <div ref={scrollRef}>
+                <Title>누가 누가 잘하나~</Title>
+                <Div ref={scrollRef}>
                     {renderGameChat()}
-                </div>
+                </Div>
             </Grid>
             <Grid direction="column" item xs={6} md={4}>
                 <Grid item xs={4}>
@@ -172,6 +199,16 @@ const gameStyle = {
     background: '#18541c',
 }
 
+const Div = styled.div`
+display: flex;
+`
+
+const Title = styled.div`
+margin-bottom: 30px;
+font-size:24px;
+color: white;
+font-family: 'Gamja Flower', cursive;
+`
 
 const GameContainer = styled.div`
 display:flex;
@@ -181,6 +218,9 @@ const NameContainer = styled.div`
 const QuestionContainer = styled.div`
 `
 const ResultContainer = styled.div`
+`
+const ResultContainer2 = styled.div`
+margin-right:100px;
 `
 const Name = styled.div`
 font-size:24px;
